@@ -1,0 +1,65 @@
+# electron-scaffold · 打包模板（electron-builder 24.x，已在本机实测）
+#
+#   首次：npm i
+#   打包：npm run dist        → dist/ScaffoldApp.exe（portable，免安装绿色版）
+#   仅解包：npm run dist:dir  → dist/win-unpacked/（调试用，启动快）
+#
+# 三条踩过的坑，别改回去：
+#   1) signAndEditExecutable: false —— 本机无符号链接权限，设 true 会在签名环节直接失败。
+#   2) 图标不要用 rcedit 改【已打包的 portable exe】：portable 是 NSIS 自解压外壳，
+#      rcedit 会重写资源段，把附加数据抹掉（实测 71MB → 78KB，exe 变砖）。
+#      正确做法：rcedit 改 node_modules/electron/dist/electron.exe，再把这个 exe 写回
+#      %LOCALAPPDATA%\electron\Cache\**\electron-v<版本>-win32-x64.zip，然后重新 dist。
+#   3) asar: true 时，进程内 __dirname 在 app.asar 里，读资源要用 path.join(__dirname, ...)，
+#      不要用 require.resolve 拼相对路径。
+appId: com.example.scaffold
+productName: ScaffoldApp
+
+directories:
+  output: dist
+  buildResources: assets
+
+files:
+  - main.js
+  - preload.js
+  - server/**/*
+  - renderer/**/*
+  - assets/**/*
+  - package.json
+  - "!**/*.map"
+  - "!**/.dev-data*"
+
+asar: true
+asarUnpack:
+  - "**/*.node"
+
+# ---------------- Windows ----------------
+win:
+  target:
+    - portable            # 绿色免安装优先；需要安装包再加 nsis
+  icon: assets/icon.ico
+  requestedExecutionLevel: asInvoker
+  signAndEditExecutable: false      # ★ 见文件头第 1 条
+
+portable:
+  artifactName: "${productName}.exe"
+  splashImage: null
+
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  artifactName: "${productName}-Setup-${version}.exe"
+
+# ---------------- 其他平台（按需启用） ----------------
+mac:
+  target: dmg
+  category: public.app-category.utilities
+  icon: assets/icon.png
+
+linux:
+  target: [AppImage]
+  category: Utility
+  icon: assets/icon.png
+
+publish: null

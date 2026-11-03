@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UI Kit 组件展示 · 待评价</title>
+<link rel="stylesheet" href="../theme.css">
+<style>
+  .demo-label { font-size:12px; color:var(--text-3); margin:14px 0 6px; }
+  .ring-wrap { display:flex; align-items:center; gap:10px; }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand"><span class="dot"></span> UI Kit 展示</div>
+    <a class="nav-item" data-target="s-buttons">按钮</a>
+    <a class="nav-item" data-target="s-cards">卡片 / 列表</a>
+    <a class="nav-item" data-target="s-table">表格</a>
+    <a class="nav-item" data-target="s-form">表单</a>
+    <a class="nav-item" data-target="s-progress">进度</a>
+    <a class="nav-item" data-target="s-downloads">下载队列</a>
+    <a class="nav-item" data-target="s-dialog">对话框 / Toast</a>
+    <a class="nav-item" data-target="s-tabs">Tabs</a>
+    <a class="nav-item" data-target="s-gesture">手势约定</a>
+    <a class="nav-item" data-target="s-records">记录本列表</a>
+    <a class="nav-item" data-target="s-settings">设置页</a>
+    <a class="nav-item" data-target="s-login">登录 / 网关</a>
+    <a class="nav-item" data-target="s-drawer">下载详情抽屉</a>
+    <a class="nav-item" data-target="s-dashboard">数据看板</a>
+    <a class="nav-item" data-target="s-cmdk">命令面板</a>
+    <a class="nav-item" data-target="s-empty">空状态引导</a>
+    <a class="nav-item" data-target="s-titlebar">窗口标题栏</a>
+    <a class="nav-item" data-target="s-palette">配色方案</a>
+    <a class="nav-item" data-target="s-calendar">日历 / 日期</a>
+    <a class="nav-item" data-target="s-gallery">图片查看器</a>
+    <a class="nav-item" data-target="s-markdown">Markdown 编辑器</a>
+    <a class="nav-item" data-target="s-dtable">高级数据表格</a>
+    <div style="margin-top:24px">
+      <button class="btn btn-sm" id="themeBtn">🌓 切换深色</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <h1>UI Kit 组件展示</h1>
+    <p class="muted">这是模块库 UI 定稿候选。请你评价审美——确认后 AI 只复制这些组件，不改样式与交互。可体验：拖拽列表排序、双击卡片、弹窗与 Toast、深浅色切换。</p>
+
+    <section class="section" id="s-buttons">
+      <h2>按钮</h2>
+      <div class="toolbar">
+        <button class="btn">默认</button>
+        <button class="btn btn-primary">主要</button>
+        <button class="btn btn-danger">危险</button>
+        <button class="btn btn-ghost">幽灵</button>
+        <button class="btn btn-sm">小号</button>
+        <button class="btn btn-lg">大号</button>
+        <button class="btn" disabled>禁用</button>
+      </div>
+    </section>
+
+    <section class="section" id="s-cards">
+      <h2>卡片 / 卡片列表（可拖拽排序）</h2>
+      <div class="grid grid-3">
+        <div class="card"><h3>卡片标题</h3><p class="muted">卡片内容描述文字。</p><span class="badge badge-accent">进行中</span></div>
+        <div class="card"><h3>统计卡</h3><p style="font-size:28px;font-weight:700;margin:8px 0">128</p><span class="badge badge-success">+12%</span></div>
+        <div class="card"><h3>提示卡</h3><p class="muted">一些说明文字。</p><span class="badge badge-warning">注意</span></div>
+      </div>
+      <p class="demo-label">拖拽右侧手柄排序（拖动 = 拖动，不替换为按钮）：</p>
+      <div class="card-list" id="dragList">
+        <div class="card-row"><span class="handle">⋮⋮</span><div><div class="title">任务一</div><div class="sub">2026-11-01 截止</div></div><span class="grow"></span><span class="badge badge-accent">进行中</span></div>
+        <div class="card-row"><span class="handle">⋮⋮</span><div><div class="title">任务二</div><div class="sub">等待开始</div></div><span class="grow"></span><span class="badge badge-warning">待办</span></div>
+        <div class="card-row"><span class="handle">⋮⋮</span><div><div class="title">任务三</div><div class="sub">已完成</div></div><span class="grow"></span><span class="badge badge-success">完成</span></div>
+        <div class="card-row"><span class="handle">⋮⋮</span><div><div class="title">任务四</div><div class="sub">已逾期</div></div><span class="grow"></span><span class="badge badge-danger">逾期</span></div>
+      </div>
+    </section>
+
+    <section class="section" id="s-table">
+      <h2>数据表格</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>名称</th><th>类型</th><th>状态</th><th>更新时间</th></tr></thead>
+          <tbody>
+            <tr><td>备考记录本</td><td>记录本</td><td><span class="badge badge-success">已上线</span></td><td>10-29</td></tr>
+            <tr><td>动漫下载器</td><td>下载</td><td><span class="badge badge-accent">维护中</span></td><td>09-21</td></tr>
+            <tr><td>米哈游养成</td><td>记录本</td><td><span class="badge badge-warning">待重构</span></td><td>10-31</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section" id="s-form">
+      <h2>表单</h2>
+      <div class="grid grid-2">
+        <div class="form-group"><label>文本输入</label><input class="input" placeholder="请输入内容"></div>
+        <div class="form-group"><label>下拉选择</label>
+          <select><option>选项 A</option><option>选项 B</option><option>选项 C</option></select></div>
+        <div class="form-group"><label>日期</label><input type="date" class="input"></div>
+        <div class="form-group"><label>多行文本</label><textarea placeholder="备注信息"></textarea></div>
+      </div>
+      <div class="form-group"><label>开关</label><label class="switch"><input type="checkbox" checked><span class="track"></span></label></div>
+      <div class="form-group"><label>滑块</label><input type="range" min="0" max="100" value="60" class="slider"></div>
+    </section>
+
+    <section class="section" id="s-progress">
+      <h2>进度</h2>
+      <div class="progress" style="margin-bottom:16px"><div class="bar" style="width:65%"></div></div>
+      <div class="ring-wrap">
+        <svg class="progress-ring" viewBox="0 0 72 72">
+          <circle cx="36" cy="36" r="28"></circle>
+          <circle class="fg" cx="36" cy="36" r="28" stroke-dasharray="175.9" stroke-dashoffset="61.6"></circle>
+        </svg>
+        <span class="muted">环形 65%</span>
+      </div>
+    </section>
+
+    <section class="section" id="s-downloads">
+      <h2>下载队列（业务模块 UI 模板）</h2>
+      <p class="muted">这是 Download Engine 模块的推荐 UI 形态。每行一个任务，含缩略、文件名、来源、状态、内嵌进度、速度与操作（左侧<b>拖拽手柄排序</b> / 暂停·继续 / 移除）。拖动最左手柄即可调整顺序。</p>
+      <div class="toolbar">
+        <button class="btn btn-primary">＋ 添加任务</button>
+        <button class="btn">▶ 全部开始</button>
+        <button class="btn">⏸ 全部暂停</button>
+        <button class="btn btn-danger">🗑 清空</button>
+        <span class="spacer"></span>
+        <select style="width:auto"><option>全部</option><option>下载中</option><option>已完成</option></select>
+      </div>
+      <div class="card-list" id="dlList">
+        <div class="dl-row" data-state="downloading" draggable="true">
+          <span class="dl-handle" title="拖拽排序">⋮⋮</span>
+          <div class="dl-thumb">🎬</div>
+          <div class="dl-main">
+            <div class="dl-title">进击的巨人 第88集 [1080P].mp4</div>
+            <div class="dl-sub"><span class="badge badge-accent">下载中</span><span>来源：樱花</span></div>
+            <div class="progress dl-progress"><div class="bar" style="width:62%"></div></div>
+            <div class="dl-meta"><span>速度 4.2 MB/s</span><span>642 MB / 1.0 GB · 62%</span></div>
+          </div>
+          <div class="dl-actions">
+            <button class="icon-btn" data-act="toggle" title="暂停">⏸</button>
+            <button class="icon-btn danger" data-act="remove" title="移除">✕</button>
+          </div>
+        </div>
+        <div class="dl-row" data-state="queued" draggable="true">
+          <span class="dl-handle" title="拖拽排序">⋮⋮</span>
+          <div class="dl-thumb">🎬</div>
+          <div class="dl-main">
+            <div class="dl-title">间谍过家家 第12集 [720P].mp4</div>
+            <div class="dl-sub"><span class="badge badge-warning">等待中</span><span>来源：苹果CMS</span></div>
+            <div class="progress dl-progress"><div class="bar" style="width:0%"></div></div>
+            <div class="dl-meta"><span>排队中</span><span>0 MB / 320 MB · 0%</span></div>
+          </div>
+          <div class="dl-actions">
+            <button class="icon-btn" data-act="toggle" title="暂停">⏸</button>
+            <button class="icon-btn danger" data-act="remove" title="移除">✕</button>
+          </div>
+        </div>
+        <div class="dl-row" data-state="paused" draggable="true">
+          <span class="dl-handle" title="拖拽排序">⋮⋮</span>
+          <div class="dl-thumb">🎬</div>
+          <div class="dl-main">
+            <div class="dl-title">葬送的芙莉莲 第05集 [1080P].mp4</div>
+            <div class="dl-sub"><span class="badge">已暂停</span><span>来源：赞片</span></div>
+            <div class="progress dl-progress"><div class="bar" style="width:35%"></div></div>
+            <div class="dl-meta"><span>已暂停</span><span>350 MB / 1.0 GB · 35%</span></div>
+          </div>
+          <div class="dl-actions">
+            <button class="icon-btn" data-act="toggle" title="继续">▶</button>
+            <button class="icon-btn danger" data-act="remove" title="移除">✕</button>
+          </div>
+        </div>
+        <div class="dl-row" data-state="done" draggable="true">
+          <span class="dl-handle" title="拖拽排序">⋮⋮</span>
+          <div class="dl-thumb">🎬</div>
+          <div class="dl-main">
+            <div class="dl-title">链锯人 第01集 [1080P].mp4</div>
+            <div class="dl-sub"><span class="badge badge-success">已完成</span><span>来源：樱花</span></div>
+            <div class="progress dl-progress"><div class="bar" style="width:100%"></div></div>
+            <div class="dl-meta"><span>—</span><span>1.1 GB / 1.1 GB · 100%</span></div>
+          </div>
+          <div class="dl-actions">
+            <button class="icon-btn" data-act="toggle" title="重新下载">↻</button>
+            <button class="icon-btn danger" data-act="remove" title="移除">✕</button>
+          </div>
+        </div>
+        <div class="dl-row" data-state="error" draggable="true">
+          <span class="dl-handle" title="拖拽排序">⋮⋮</span>
+          <div class="dl-thumb">🎬</div>
+          <div class="dl-main">
+            <div class="dl-title">咒术回战 第23集 [1080P].mp4</div>
+            <div class="dl-sub"><span class="badge badge-danger">失败</span><span>来源：youknow</span></div>
+            <div class="progress dl-progress"><div class="bar" style="width:48%"></div></div>
+            <div class="dl-meta"><span>失败：连接超时</span><span>520 MB / 1.0 GB · 48%</span></div>
+          </div>
+          <div class="dl-actions">
+            <button class="icon-btn" data-act="toggle" title="重试">↻</button>
+            <button class="icon-btn danger" data-act="remove" title="移除">✕</button>
+          </div>
+        </div>
+      </div>
+      <p class="demo-label">空状态示例（队列清空后）：</p>
+      <div class="empty"><div class="icon">📭</div><div>暂无下载任务</div></div>
+    </section>
+
+    <section class="section" id="s-dialog">
+      <h2>对话框 / Toast</h2>
+      <div class="toolbar">
+        <button class="btn btn-primary" id="openDialog">打开对话框</button>
+        <button class="btn" id="toastInfo">Toast 信息</button>
+        <button class="btn" id="toastOk">Toast 成功</button>
+        <button class="btn btn-danger" id="toastErr">Toast 错误</button>
+      </div>
+    </section>
+
+    <section class="section" id="s-tabs">
+      <h2>Tabs</h2>
+      <div class="tabs">
+        <div class="tab active" data-tab="t1">概览</div>
+        <div class="tab" data-tab="t2">详情</div>
+        <div class="tab" data-tab="t3">设置</div>
+      </div>
+      <div class="tab-panel active" id="t1">概览内容：这里是概览面板。</div>
+      <div class="tab-panel" id="t2">详情内容：这里是详情面板。</div>
+      <div class="tab-panel" id="t3">设置内容：这里是设置面板。</div>
+    </section>
+
+    <section class="section" id="s-gesture">
+      <h2>手势约定（铁律）</h2>
+      <div class="card">
+        <p>· <b>双击</b>下方卡片 = 进入编辑（绝不替换为单击）</p>
+        <div class="card-row" id="dblCard" style="cursor:pointer;margin-bottom:12px">
+          <span class="grow"><div class="title">双击我编辑</div><div class="sub">双击事件：<span id="dblLog">未触发</span></div></span>
+        </div>
+        <p>· <b>拖动</b>上方列表手柄 = 排序（绝不篡改为按钮）</p>
+        <p>· <b>右键</b> = 右键菜单（预留，AI 不得删除或改交互）</p>
+      </div>
+    </section>
+
+    <section class="section" id="s-records">
+      <h2>记录本列表 / 编辑页（RecordBook 核心）</h2>
+      <p class="muted">一份 schema 生成一个本子：列表浏览 + 搜索 + 新增/编辑弹窗（按 schema 动态生成表单）+ 导入导出 + 多选批量操作。每行可<b>拖拽左侧手柄排序</b>，每条可挂<b>不限数量链接</b>（本地路径 / 网址，点击即打开）。</p>
+      <div class="toolbar">
+        <input class="input" style="max-width:240px" placeholder="🔍 搜索…">
+        <button class="btn btn-primary" id="openEdit">＋ 新增</button>
+        <button class="btn">⬆ 导入</button>
+        <button class="btn">⬇ 导出</button>
+        <span class="spacer"></span>
+        <select style="width:auto"><option>全部状态</option><option>进行中</option><option>已完成</option></select>
+      </div>
+      <div class="rec-head">
+        <span class="rh-h"></span>
+        <span class="rh-s"><input type="checkbox" id="selAll"></span>
+        <span class="rh-main">名称 / 链接</span>
+        <span class="rh-cat">分类</span>
+        <span class="rh-st">状态</span>
+        <span class="rh-date">更新</span>
+        <span class="rh-act">操作</span>
+      </div>
+      <div class="card-list" id="recList"></div>
+      <div class="bulk-bar" id="bulkBar">
+        <span id="bulkCount">已选 0 项</span>
+        <span style="flex:1"></span>
+        <button class="bb-btn" id="bulkDone">标记完成</button>
+        <button class="bb-btn" id="bulkDel">删除</button>
+      </div>
+    </section>
+
+    <section class="section" id="s-settings">
+      <h2>设置页（Config Store）</h2>
+      <p class="muted">分组导航 + 分组卡片表单；低利害改动自动保存并提示，高利害（如清空数据）才弹确认。</p>
+      <div class="settings-layout">
+        <div class="settings-nav" id="setNav">
+          <div class="snav active" data-set="general">通用</div>
+          <div class="snav" data-set="download">下载</div>
+          <div class="snav" data-set="about">关于</div>
+        </div>
+        <div>
+          <div class="settings-group" data-setgroup="general">
+            <h3>通用</h3>
+            <div class="form-group"><label>默认保存路径</label><div class="field-row"><input class="input" value="D:\Downloads"><button class="btn">浏览</button></div></div>
+            <div class="form-group"><label>主题</label><select><option>跟随系统</option><option>浅色</option><option>深色</option></select></div>
+            <div class="form-group"><label>启动最小化到托盘</label><label class="switch"><input type="checkbox" checked><span class="track"></span></label></div>
+            <p class="autosave-tip">✓ 已自动保存</p>
+          </div>
+          <div class="settings-group" data-setgroup="download" style="display:none">
+            <h3>下载</h3>
+            <div class="form-group"><label>并发线程数</label><input class="input" type="number" value="24"></div>
+            <div class="form-group"><label>FFmpeg 路径</label><input class="input" value="D:\Documents\开发资源库\x86\32\ffmpeg\ffmpeg.exe"></div>
+            <div class="form-group"><label>完成后自动合并</label><label class="switch"><input type="checkbox" checked><span class="track"></span></label></div>
+          </div>
+          <div class="settings-group" data-setgroup="about" style="display:none">
+            <h3>关于</h3>
+            <p class="muted">模块库演示 · v1.0.0</p>
+            <button class="btn btn-danger">清空所有数据</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="s-login">
+      <h2>登录 / 网关页（Auth Gateway）</h2>
+      <p class="muted">居中卡片 + 账号密码 + 错误提示（Alert）；登录后展示登录态徽标与登出。</p>
+      <div class="auth-wrap">
+        <div class="card auth-card">
+          <div class="logo">🔐</div>
+          <h3>登录到网关</h3>
+          <div class="sub">交大 SSO / AcFun 网关</div>
+          <div class="alert alert-danger">✕ 账号或密码错误，或登录已过期</div>
+          <div class="form-group"><label>账号</label><input class="input" placeholder="请输入账号"></div>
+          <div class="form-group"><label>密码</label><input class="input" type="password" placeholder="请输入密码"></div>
+          <button class="btn btn-primary" style="width:100%">登录</button>
+          <div class="login-state"><span class="badge badge-success">● 已登录</span><button class="btn btn-ghost btn-sm">登出</button></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="s-drawer">
+      <h2>下载详情 / 日志抽屉（Download Engine）</h2>
+      <p class="muted">点击打开右侧抽屉：分片进度 + 实时日志（带级别过滤）。</p>
+      <button class="btn btn-primary" id="openDrawer">打开下载详情</button>
+    </section>
+
+    <section class="section" id="s-dashboard">
+      <h2>数据看板（Dashboard）</h2>
+      <p class="muted">统计卡 + 简易条形图，适合记账 / 养成记录等。</p>
+      <div class="stat-grid">
+        <div class="stat-card"><div class="label">本月下载</div><div class="value">128</div><div class="trend up">▲ 12%</div></div>
+        <div class="stat-card"><div class="label">完成任务</div><div class="value">47</div><div class="trend up">▲ 8%</div></div>
+        <div class="stat-card"><div class="label">进行中</div><div class="value">9</div><div class="trend down">▼ 3%</div></div>
+        <div class="stat-card"><div class="label">存储占用</div><div class="value">36G</div><div class="trend up">▲ 5%</div></div>
+      </div>
+      <h3 style="margin-top:24px;font-size:14px">近 7 日活跃</h3>
+      <div class="bar-chart">
+        <div class="bar-col"><div class="bar cat-1" style="height:40%"><span class="bar-val">40</span></div><div class="bar-label">一</div></div>
+        <div class="bar-col"><div class="bar cat-2" style="height:70%"><span class="bar-val">70</span></div><div class="bar-label">二</div></div>
+        <div class="bar-col"><div class="bar cat-3" style="height:55%"><span class="bar-val">55</span></div><div class="bar-label">三</div></div>
+        <div class="bar-col"><div class="bar cat-4" style="height:90%"><span class="bar-val">90</span></div><div class="bar-label">四</div></div>
+        <div class="bar-col"><div class="bar cat-1" style="height:60%"><span class="bar-val">60</span></div><div class="bar-label">五</div></div>
+        <div class="bar-col"><div class="bar cat-2" style="height:80%"><span class="bar-val">80</span></div><div class="bar-label">六</div></div>
+        <div class="bar-col"><div class="bar cat-3" style="height:35%"><span class="bar-val">35</span></div><div class="bar-label">日</div></div>
+      </div>
+    </section>
+
+    <section class="section" id="s-cmdk">
+      <h2>命令面板（Cmd+K）</h2>
+      <p class="muted">键盘优先的快速操作 / 导航。按 Ctrl/⌘+K 打开，支持分组、模糊高亮、快捷键提示。</p>
+      <button class="btn btn-primary" id="openCmdk">打开命令面板</button>
+    </section>
+
+    <section class="section" id="s-empty">
+      <h2>空状态 / 首跑引导（Empty State）</h2>
+      <p class="muted">首次使用不是空白屏，而是：命名缺失 → 解释价值 → 指向第一步；并用清单引导激活。</p>
+      <div class="card" style="max-width:480px">
+        <div class="empty" style="padding:24px 16px">
+          <div class="icon">📭</div>
+          <div style="font-weight:600;margin:8px 0 4px">还没有任何记录</div>
+          <div class="muted small">记录本用来集中管理你的备考、娱乐与养成数据。</div>
+          <button class="btn btn-primary" style="margin-top:12px">＋ 创建第一条</button>
+        </div>
+      </div>
+      <h3 style="margin-top:24px;font-size:14px">激活清单（首跑引导）</h3>
+      <div class="checklist" style="max-width:480px">
+        <div class="check-item done"><span class="box">✓</span><span class="ct">创建本子</span></div>
+        <div class="check-item done"><span class="box">✓</span><span class="ct">添加第一条记录</span></div>
+        <div class="check-item"><span class="box"></span><span class="ct">配置默认保存路径</span></div>
+        <div class="check-item"><span class="box"></span><span class="ct">体验导入 / 导出</span></div>
+      </div>
+    </section>
+
+    <section class="section" id="s-titlebar">
+      <h2>窗口标题栏（窗口 chrome 示意）</h2>
+      <p class="muted">Frameless 窗口 + 自定义标题栏（drag region）+ 窗口控制按钮。这是 Electron 原生感的关键。</p>
+      <div class="titlebar" style="border-radius:var(--radius)">
+        <span class="tb-title">我的工具 — 下载队列</span>
+        <div class="tb-actions">
+          <button class="tb-btn">—</button>
+          <button class="tb-btn">▢</button>
+          <button class="tb-btn close">✕</button>
+        </div>
+      </div>
+      <p class="muted small" style="margin-top:8px">实际项目里用 <code>titleBarStyle:'hidden'</code> + <code>-webkit-app-region:drag</code> 实现，按钮区域标记 no-drag。</p>
+    </section>
+
+    <section class="section" id="s-palette">
+      <h2>配色方案（分类数据 2 / 3 / 4 元）</h2>
+      <div class="palette-banner">
+        <b>铁律</b>：① 图表/色块对比度 ≥ <b>3:1</b>，文字 ≥ <b>4.5:1</b>（WCAG）；② 分类数据单图最佳 ≤ <b>4 类</b>；③ <b>浅底 / 深底各一套</b>（同一色在两套背景对比度会反转）；④ 色不能单独表意——必配<b>图标或文字</b>。
+        下方每个色都<b>实时计算</b>在浅/深底的对比度，<span style="color:#c42b1c;font-weight:700">标红即 &lt;3:1</span>，该背景下请换同色相变体或加 1px 描边 + 文字冗余。
+      </div>
+      <div id="paletteRoot"></div>
+    </section>
+
+    <section class="section" id="s-calendar">
+      <h2>日历 / 日期选择器</h2>
+      <p class="muted">月份网格：点击日期选中、高亮今天、跨月灰显；可用于备考计划、待办、记账本。</p>
+      <div class="calendar card">
+        <div class="cal-header">
+          <button class="icon-btn" id="calPrev" title="上一月">‹</button>
+          <span class="cal-title" id="calTitle">2026年11月</span>
+          <button class="icon-btn" id="calNext" title="下一月">›</button>
+          <span class="spacer"></span>
+          <button class="btn btn-sm" id="calToday">今天</button>
+        </div>
+        <div class="cal-week"><span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span></div>
+        <div class="cal-grid" id="calGrid"></div>
+      </div>
+      <p class="demo-label">已选日期：<b id="calSel">—</b></p>
+    </section>
+
+    <section class="section" id="s-gallery">
+      <h2>图片查看器 / 画廊</h2>
+      <p class="muted">主图预览 + 缩略图条 + 翻页/缩放（演示用内嵌 SVG，离线可用）。画图板、动漫封面常见需求。</p>
+      <div class="gallery">
+        <div class="gallery-main">
+          <div class="gm-img" id="gmImg"></div>
+          <div class="gm-bar">
+            <button class="icon-btn" id="gmPrev" title="上一张">‹</button>
+            <span id="gmIndex">1 / 5</span>
+            <button class="icon-btn" id="gmNext" title="下一张">›</button>
+            <span class="spacer"></span>
+            <button class="icon-btn" id="gmZoomOut" title="缩小">－</button>
+            <span id="gmZoom">100%</span>
+            <button class="icon-btn" id="gmZoomIn" title="放大">＋</button>
+            <button class="icon-btn" id="gmFit" title="重置">⤢</button>
+          </div>
+        </div>
+        <div class="gallery-thumbs" id="gmThumbs"></div>
+      </div>
+    </section>
+
+    <section class="section" id="s-markdown">
+      <h2>Markdown 编辑器（带实时预览）</h2>
+      <p class="muted">左编辑右预览，工具栏快捷插入语法。笔记 / 说明类工具通用。</p>
+      <div class="md-toolbar">
+        <button class="btn btn-sm" data-md="bold"><b>B</b></button>
+        <button class="btn btn-sm" data-md="italic"><i>I</i></button>
+        <button class="btn btn-sm" data-md="h">H</button>
+        <button class="btn btn-sm" data-md="list">• 列表</button>
+        <button class="btn btn-sm" data-md="code">代码</button>
+        <button class="btn btn-sm" data-md="link">链接</button>
+      </div>
+      <div class="md-split">
+        <textarea class="md-input" id="mdInput"># 标题一
+## 小标题
+这是一段 **加粗** 与 *斜体* 文本，还有 `行内代码`。
+
+- 列表项 A
+- 列表项 B
+
+> 引用：UI Kit 是模块库的核心资产。
+
+```
+code block
+第二行
+```
+
+访问 [开发模块库](https://example.com) 了解更多。</textarea>
+        <div class="md-preview" id="mdPreview"></div>
+      </div>
+    </section>
+
+    <section class="section" id="s-dtable">
+      <h2>高级数据表格（分页 + 排序 + 筛选 + 列显隐）</h2>
+      <p class="muted">表头点击排序、搜索过滤、分页、列显隐菜单。把现成的记录本表格升级用它。</p>
+      <div class="toolbar">
+        <input class="input" id="dtSearch" placeholder="🔍 搜索名称 / 分类…" style="max-width:240px">
+        <span class="spacer"></span>
+        <span class="small muted">每页</span>
+        <select id="dtPageSize" style="width:auto">
+          <option>5</option><option selected>10</option><option>20</option>
+        </select>
+        <button class="btn btn-sm" id="dtCols">列设置 ▾</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr id="dtHead"></tr></thead>
+          <tbody id="dtBody"></tbody>
+        </table>
+      </div>
+      <div class="dt-pager" id="dtPager"></div>
+    </section>
+  </main>
+</div>
+
+<div class="dialog-mask" id="dialogMask">
+  <div class="dialog">
+    <h3>确认操作</h3>
+    <p class="muted">这是一个对话框示例。确认后将执行对应操作。</p>
+    <div class="actions">
+      <button class="btn" id="dlgCancel">取消</button>
+      <button class="btn btn-primary" id="dlgOk">确认</button>
+    </div>
+  </div>
+</div>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<!-- 编辑弹窗（RecordBook 动态表单演示，含链接管理） -->
+<div class="dialog-mask" id="editDialog">
+  <div class="dialog">
+    <h3>新增 / 编辑记录</h3>
+    <p class="muted">实际项目里表单按 schema 动态生成；此处为演示字段。</p>
+    <div class="form-group"><label>名称</label><input class="input" id="f-title" placeholder="如：高等数学 复习"></div>
+    <div class="form-group"><label>分类</label><select id="f-cat"><option>备考</option><option>学习</option><option>生活</option></select></div>
+    <div class="form-group"><label>状态</label><select id="f-status"><option>进行中</option><option>待办</option><option>已完成</option></select></div>
+    <div class="form-group">
+      <label>链接（本地路径 / 网址，不限数量）</label>
+      <div id="editLinks" class="link-manage"></div>
+      <button class="btn btn-sm" id="editAddLink" style="margin-top:6px">＋ 添加链接</button>
+    </div>
+    <div class="form-group"><label>备注</label><textarea id="f-note" placeholder="可选"></textarea></div>
+    <div class="actions">
+      <button class="btn" id="editCancel">取消</button>
+      <button class="btn btn-primary" id="editSave">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- 下载详情抽屉 -->
+<div class="drawer-mask" id="drawerMask">
+  <div class="drawer">
+    <div class="drawer-header">
+      <strong>进击的巨人 第88集</strong>
+      <button class="close-x" id="closeDrawer">✕</button>
+    </div>
+    <div class="drawer-body">
+      <div class="form-group"><label>总进度</label><div class="progress"><div class="bar" style="width:62%"></div></div></div>
+      <h3 style="font-size:14px">分片进度（24 线程）</h3>
+      <div class="seg-list">
+        <div class="seg-row"><span style="width:40px">#01</span><div class="seg-bar"><i style="width:100%"></i></div><span>完成</span></div>
+        <div class="seg-row"><span style="width:40px">#02</span><div class="seg-bar"><i style="width:80%"></i></div><span>下载中</span></div>
+        <div class="seg-row"><span style="width:40px">#03</span><div class="seg-bar"><i style="width:45%"></i></div><span>下载中</span></div>
+        <div class="seg-row"><span style="width:40px">#04</span><div class="seg-bar"><i style="width:0%"></i></div><span>等待</span></div>
+      </div>
+      <h3 style="font-size:14px">实时日志</h3>
+      <div class="log-filter">
+        <button class="btn btn-sm" data-log="all">全部</button>
+        <button class="btn btn-sm" data-log="info">信息</button>
+        <button class="btn btn-sm" data-log="warn">警告</button>
+        <button class="btn btn-sm" data-log="error">错误</button>
+      </div>
+      <div class="log-view" id="logView">
+        <div class="log-line log-info">[12:01:03] 开始连接 樱花 源…</div>
+        <div class="log-line log-info">[12:01:04] 已建立 24 路连接</div>
+        <div class="log-line log-warn">[12:01:20] 源 #03 速度偏低，已切换备用</div>
+        <div class="log-line log-error">[12:02:11] 分片 #04 校验失败，已重试</div>
+        <div class="log-line log-info">[12:02:30] 已下载 642 MB / 1.0 GB</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 命令面板 -->
+<div class="cmdk-mask" id="cmdkMask">
+  <div class="cmdk">
+    <input class="cmdk-input" id="cmdkInput" placeholder="输入命令或搜索… (Esc 关闭)">
+    <div id="cmdkList">
+      <div class="cmdk-group">导航</div>
+      <div class="cmdk-item active"><span>🏠</span><span class="ci-label">回到首页</span><span class="cmdk-kbd">G H</span></div>
+      <div class="cmdk-item"><span>📥</span><span class="ci-label">打开下载队列</span><span class="cmdk-kbd">G D</span></div>
+      <div class="cmdk-group">操作</div>
+      <div class="cmdk-item"><span>➕</span><span class="ci-label">新增记录</span><span class="cmdk-kbd">⌘ N</span></div>
+      <div class="cmdk-item"><span>⚙</span><span class="ci-label">打开设置</span><span class="cmdk-kbd">⌘ ,</span></div>
+      <div class="cmdk-item"><span>🌓</span><span class="ci-label">切换深色模式</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- 右键上下文菜单 -->
+<div class="ctx-menu" id="ctxMenu">
+  <div class="ctx-item">编辑</div>
+  <div class="ctx-item">复制</div>
+  <div class="ctx-item">标记完成</div>
+  <div class="ctx-item" style="color:var(--danger)">删除</div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

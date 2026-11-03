@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>Download Engine · 下载队列 UI</title>
+  <link rel="stylesheet" href="../../ui-kit/theme.css">
+  <style>
+    body { font-family: var(--font); background: var(--bg); color: var(--text); margin: 0; padding: 24px; }
+    .wrap { max-width: 760px; margin: 0 auto; }
+    h1 { font-size: 18px; } .muted { color: var(--text-2); }
+    .toolbar { display: flex; gap: 8px; margin: 16px 0; align-items: center; }
+    #dlList { display: flex; flex-direction: column; gap: 10px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>下载队列 · Download Engine UI</h1>
+    <p class="muted">组件来自 UI Kit，数据来自 Download Engine 的事件流。下面是「模拟引擎」演示事件→UI 的接法。</p>
+    <div class="toolbar">
+      <input class="input" id="urlInput" style="flex:1" placeholder="粘贴一个文件 URL（演示用模拟下载）">
+      <button class="btn btn-primary" id="addBtn">＋ 加入队列</button>
+    </div>
+    <div id="dlList"></div>
+  </div>
+
+  <script>
+  // ---- 模拟引擎：接口与真实 DownloadEngine 一致（on/emit + add/pause/resume/remove） ----
+  class MockEngine {
+    constructor(){ this.tasks = new Map(); this._seq = 0; this._h = {}; }
+    on(e, fn){ (this._h[e] ||= []).push(fn); return this; }
+    _emit(e, p){ (this._h[e]||[]).forEach(f => f(p)); }
+    add({url, dest}){
+      const id = 'dl' + (++this._seq);
+      const t = { id, url, dest: dest||url.split('/').pop(), status:'downloading', total: 1000, downloaded: 0, timer:null };
+      this.tasks.set(id, t);
+      this._emit('added', { id, url: t.url, dest: t.dest });
+      const step = () => {
+        if (t.status !== 'downloading') return;
+        t.downloaded = Math.min(t.total, t.downloaded + Math.random()*60 + 20);
+        this._emit('progress', { id, downloaded: t.downloaded|0, total: t.total, percent: (t.downloaded/t.total*100)|0, speed: (Math.random()*5+1).toFixed(1)+' MB/s' });
+        if (t.downloaded >= t.total) { t.status='done'; this._emit('done', { id, dest: t.dest }); return; }
+        t.timer = setTimeout(step, 200);
+      };
+      t.timer = setTimeout(step, 200);
+      return id;
+    }
+    pause(id){ const t=this.tasks.get(id); if(t){ t.status='paused'; clearTimeout(t.timer); this._emit('paused',{id}); } }
+    resume(id){ const t=this.tasks.get(id); if(t&&t.status==='paused'){ t.status='downloading'; this._emit('progress',{id,downloaded:t.downloaded|0,total:t.total,percent:(t.downloaded/t.total*100)|0,speed:'0 MB/s'}); const step=()=>{ if(t.status!=='downloading')return; t.downloaded=Math.min(t.total,t.downloaded+Math.random()*60+20); this._emit('progress',{id,downloaded:t.downloaded|0,total:t.total,percent:(t.downloaded/t.total*100)|0,speed:(Math.random()*5+1).toFixed(1)+' MB/s'}); if(t.downloaded>=t.total){t.status='done';this._emit('done',{id,dest:t.dest});return;} t.timer=setTimeout(step,200);}; t.timer=setTimeout(step,200); } }
+    remove(id){ const t=this.tasks.get(id); if(t){ clearTimeout(t.timer); this.tasks.delete(id); this._emit('removed',{id}); } }
+  }
+
+  // ---- 真实接法（和 README 示例一致）----
+  const eng = new MockEngine();
+  const list = document.getElementById('dlList');
+  const rows = {};
+  const badgeMap = { downloading:['下载中','badge-accent','⏸'], queued:['等待中','badge-warning','⏸'], paused:['已暂停','','▶'], done:['已完成','badge-success','↻'], error:['失败','badge-danger','↻'] };
+
+  eng.on('added', e => {
+    const row = document.createElement('div');
+    row.className = 'dl-row'; row.dataset.id = e.id; row.dataset.state = 'downloading'; row.setAttribute('draggable','true');
+    row.innerHTML = `<div class="dl-handle" title="拖动排序">⋮⋮</div>
+      <div class="dl-thumb">📄</div>
+      <div class="dl-main">
+        <div class="dl-title">${e.dest}</div>
+        <div class="dl-sub"><span class="badge badge-accent">下载中</span><span>来源：队列</span></div>
+        <div class="progress dl-progress"><div class="bar" style="width:0%"></div></div>
+        <div class="dl-meta"><span class="sp">—</span><span class="sz">0 / 1000 · 0%</span></div>
+      </div>
+      <div class="dl-actions">
+        <button class="icon-btn" data-act="toggle" title="暂停">⏸</button>
+        <button class="icon-btn danger" data-act="remove" title="移除">✕</button>
+      </div>`;
+    list.appendChild(row); rows[e.id] = row;
+  });
+  eng.on('progress', e => {
+    const r = rows[e.id]; if (!r) return;
+    r.querySelector('.bar').style.width = e.percent + '%';
+    r.querySelector('.sp').textContent = '速度 ' + e.speed;
+    r.querySelector('.sz').textContent = `${e.downloaded} / ${e.total} · ${e.percent}%`;
+  });
+  eng.on('done', e => setBadge(e.id, 'done'));
+  eng.on('paused', e => setBadge(e.id, 'paused'));
+  eng.on('removed', e => { rows[e.id]?.remove(); delete rows[e.id]; });
+
+  function setBadge(id, st){
+    const r = rows[id]; if (!r) return;
+    const [t, c, ic] = badgeMap[st];
+    const b = r.querySelector('.badge'); b.textContent = t; b.className = 'badge ' + c;
+    r.dataset.state = st;
+    r.querySelector('[data-act="toggle"]').textContent = ic;
+  }
+
+  // 操作按钮 + 拖拽（拖动=拖动，禁止改成别的）
+  list.addEventListener('click', ev => {
+    const btn = ev.target.closest('.icon-btn'); if (!btn) return;
+    const id = btn.closest('.dl-row').dataset.id; const act = btn.dataset.act;
+    if (act === 'toggle') { const st = rows[id].dataset.state; st==='downloading' ? eng.pause(id) : eng.resume(id); }
+    if (act === 'remove') eng.remove(id);
+  });
+  let dragEl = null;
+  list.ondragstart = e => { dragEl = e.target.closest('.dl-row'); dragEl?.classList.add('dragging'); };
+  list.ondragend = e => { e.target.closest('.dl-row')?.classList.remove('dragging'); dragEl = null; };
+  list.ondragover = e => {
+    e.preventDefault();
+    const row = e.target.closest('.dl-row');
+    if (dragEl && row && dragEl !== row) {
+      const r = row.getBoundingClientRect();
+      list.insertBefore(dragEl, (e.clientY - r.top) > r.height/2 ? row.nextSibling : row);
+    }
+  };
+
+  document.getElementById('addBtn').onclick = () => {
+    const u = document.getElementById('urlInput').value.trim() || 'https://example.com/sample.mp4';
+    eng.add({ url: u });
+    document.getElementById('urlInput').value = '';
+  };
+  </script>
+</body>
+</html>

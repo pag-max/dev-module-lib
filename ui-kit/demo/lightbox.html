@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UI Kit · 放大预览组件 demo</title>
+<link rel="stylesheet" href="../theme.css">
+<link rel="stylesheet" href="../components/lightbox.css">
+<style>
+  body { margin: 0; padding: 28px; background: var(--bg, #f5f7fb); color: var(--text, #16233c); }
+  h1 { font-size: 20px; margin: 0 0 6px; }
+  .sub { font-size: 13px; color: var(--text-2, #5b6b85); margin-bottom: 20px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; max-width: 980px; }
+  .card { position: relative; border-radius: 12px; overflow: hidden; cursor: zoom-in; background: #0d1420;
+          box-shadow: 0 2px 10px rgba(16,34,64,.10); transition: transform .16s, box-shadow .16s; }
+  .card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(16,34,64,.18); }
+  .card img { width: 100%; aspect-ratio: 16/10; object-fit: cover; display: block; }
+  .card .cap { padding: 8px 10px; font-size: 12px; color: #eaf0fa; background: #101a2b; }
+  .hintbox { margin-top: 22px; font-size: 12px; color: var(--text-2, #5b6b85); line-height: 1.9; }
+  code { background: rgba(47,107,255,.08); padding: 1px 5px; border-radius: 4px; }
+</style>
+</head>
+<body>
+  <h1>放大预览（Lightbox）组件</h1>
+  <div class="sub">点任意一张卡片 → 弹窗放大。键盘 ←/→ 翻页、滚轮缩放、双击 1:1、Esc 关闭。</div>
+
+  <div class="grid" id="grid"></div>
+
+  <div class="hintbox">
+    验证要点：① 单击卡片即弹窗（不是双击）　② 弹窗内 ←/→ 换图、计数器同步　③ 滚轮能缩放，双击回 1:1<br>
+    ④ Esc 关闭且页面滚动恢复　⑤ 视频项自动静音播放、切换后旧视频必须停（看任务管理器/控制台无残留）
+  </div>
+
+<script src="../components/lightbox.js"></script>
+<script>
+// 4 张离线可用的示例图（内联 SVG，避免依赖网络）
+function art(c1, c2, label, n) {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="750">
+    <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient></defs>
+    <rect width="1200" height="750" fill="url(#g)"/>
+    <circle cx="960" cy="180" r="150" fill="rgba(255,255,255,.12)"/>
+    <circle cx="240" cy="600" r="210" fill="rgba(0,0,0,.10)"/>
+    <text x="60" y="640" font-family="Segoe UI, Microsoft YaHei" font-size="72" fill="rgba(255,255,255,.92)">${label}</text>
+    <text x="62" y="690" font-family="Segoe UI, Microsoft YaHei" font-size="28" fill="rgba(255,255,255,.55)">1240 × 780 · item ${n}</text>
+  </svg>`;
+  return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+}
+
+const items = [
+  { src: art('#1e3a8a', '#3b82f6', '深海蓝', 1), title: '深海蓝 · 极简渐变', meta: '1240×780 · SVG' },
+  { src: art('#7c2d12', '#f59e0b', '赤陶橙', 2), title: '赤陶橙 · 暖调', meta: '1240×780 · SVG' },
+  { src: art('#064e3b', '#10b981', '林间绿', 3), title: '林间绿 · 自然系', meta: '1240×780 · SVG' },
+  { src: art('#3b0764', '#a855f7', '暮光紫', 4), title: '暮光紫 · 霓虹', meta: '1240×780 · SVG' }
+];
+
+const grid = document.getElementById('grid');
+items.forEach((it, i) => {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = '<img src="' + it.src + '" alt=""><div class="cap">' + it.title + '</div>';
+  card.addEventListener('click', () => openAt(i));
+  grid.appendChild(card);
+});
+
+function openAt(i) {
+  MediaLightbox.open({
+    items: items,
+    index: i,
+    onDownload: (item, idx) => {
+      window.__lbDownloaded = (window.__lbDownloaded || 0) + 1;
+      console.log('下载按钮点击：', idx, item.title);
+    },
+    onIndexChange: (idx) => { window.__lbIndex = idx; }
+  });
+  window.__lbIndex = i;
+}
+window.__openAt = openAt;
+</script>
+</body>
+</html>

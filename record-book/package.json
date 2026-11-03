@@ -1,0 +1,16 @@
+{
+  "name": "record-book",
+  "version": "1.0.0",
+  "description": "记录本核心模块（RecordBook）—— 来自「开发模块库」，schema 驱动的可复用记录本。直接复用 ui-kit 的 theme.css。",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "web": "echo 直接用浏览器打开 page.html 即可体验（localStorage 存储）"
+  },
+  "dependencies": {
+    "electron": "^30.0.0"
+  },
+  "module": {
+    "supported": true
+  }
+}

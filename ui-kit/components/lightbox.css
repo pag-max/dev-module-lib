@@ -1,0 +1,168 @@
+/* UI Kit · 放大预览（Lightbox）组件  v1.0.0
+ * 配套 ui-kit/components/lightbox.js，依赖 theme.css 的设计令牌（缺失时走内置兜底值）。
+ * 铁律：遮罩用纯色，不用 backdrop-filter —— 在 Electron --disable-gpu 下会露底/发黑。
+ */
+
+.lb-mask {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  display: none;
+  flex-direction: column;
+  background: #070b12;            /* 纯色不透明：避免 disable-gpu 下穿透 */
+  color: #eaf0fa;
+  font-family: var(--font, "Microsoft YaHei", "Segoe UI", system-ui, sans-serif);
+}
+.lb-mask.lb-open { display: flex; }
+
+/* 顶栏 */
+.lb-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  min-height: 48px;
+  flex: 0 0 auto;
+}
+.lb-title {
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lb-meta { font-size: 12px; color: #8a97ad; margin-left: auto; white-space: nowrap; }
+.lb-counter { font-size: 12px; color: #8a97ad; font-variant-numeric: tabular-nums; }
+
+.lb-btn {
+  appearance: none;
+  border: 1px solid rgba(255, 255, 255, .14);
+  background: rgba(255, 255, 255, .06);
+  color: #eaf0fa;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 13px;
+  cursor: pointer;
+  line-height: 1.2;
+  transition: background .15s, border-color .15s;
+}
+.lb-btn:hover { background: rgba(255, 255, 255, .12); border-color: rgba(255, 255, 255, .26); }
+.lb-btn:active { transform: translateY(1px); }
+.lb-btn.lb-primary { background: #2f6bff; border-color: #2f6bff; color: #fff; }
+.lb-btn.lb-primary:hover { background: #3f79ff; }
+.lb-btn:focus-visible { outline: 2px solid #7aa2ff; outline-offset: 2px; }
+.lb-close { margin-left: 4px; }
+
+/* 舞台 */
+.lb-stage {
+  position: relative;
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 0 56px 30px;          /* 底部留白给快捷键提示，避免压住图片 */
+}
+.lb-media {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  transform-origin: center center;
+  transition: transform .12s ease-out;
+  box-shadow: 0 18px 60px rgba(0, 0, 0, .6);
+  background: #0d1420;
+  border-radius: 6px;
+}
+.lb-media.lb-zoom { transition: none; cursor: grab; }
+.lb-media.lb-zoom.lb-grabbing { cursor: grabbing; }
+
+/* 左右翻页 */
+.lb-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, .06);
+  color: #eaf0fa;
+  font-size: 22px;
+  cursor: pointer;
+  transition: background .15s;
+}
+.lb-nav:hover { background: rgba(255, 255, 255, .14); }
+.lb-prev { left: 8px; }
+.lb-next { right: 8px; }
+.lb-nav[disabled] { opacity: .25; cursor: default; }
+
+/* 加载与错误 */
+.lb-tip {
+  position: absolute;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: #8a97ad;
+  pointer-events: none;
+}
+.lb-tip.lb-show { display: flex; }
+.lb-spin {
+  width: 26px; height: 26px;
+  border: 2px solid rgba(255, 255, 255, .2);
+  border-top-color: #7aa2ff;
+  border-radius: 50%;
+  animation: lb-rotate .8s linear infinite;
+  margin-right: 10px;
+}
+@keyframes lb-rotate { to { transform: rotate(360deg); } }
+
+/* 底部缩略条（可选） */
+.lb-strip {
+  flex: 0 0 auto;
+  display: flex;
+  gap: 8px;
+  padding: 10px 16px 14px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+.lb-strip:empty { display: none; }
+.lb-thumb {
+  width: 64px; height: 44px;
+  border-radius: 6px;
+  object-fit: cover;
+  cursor: pointer;
+  opacity: .5;
+  border: 2px solid transparent;
+  flex: 0 0 auto;
+  background: #0d1420;
+}
+.lb-thumb.lb-active { opacity: 1; border-color: #2f6bff; }
+
+/* 提示条 */
+.lb-hint {
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 11px;
+  line-height: 1;
+  color: #8a97ad;
+  background: rgba(13, 20, 32, .92);
+  border: 1px solid rgba(255, 255, 255, .08);
+  border-radius: 999px;
+  padding: 4px 10px;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 2;
+}
+
+@media (max-width: 720px) {
+  .lb-stage { padding: 0 8px 8px; }
+  .lb-nav { width: 32px; height: 48px; }
+  .lb-hint { display: none; }
+}

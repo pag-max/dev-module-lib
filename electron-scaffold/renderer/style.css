@@ -1,0 +1,150 @@
+/* electron-scaffold · 页面样式
+ * 复用 ui-kit/theme.css 的设计令牌（--bg/--card/--text/--primary…），这里只写布局。
+ * 颜色一律走 var(--x)，不要在这里写死色值，否则换主题就花了。
+ */
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--bg, #f5f7fb);
+  color: var(--text, #16233c);
+  font-family: var(--font, "Microsoft YaHei", "Segoe UI", system-ui, sans-serif);
+  font-size: 14px;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 22px;
+  background: var(--card, #fff);
+  border-bottom: 1px solid var(--line, #e6ebf3);
+}
+.logo {
+  width: 30px; height: 30px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #2f6bff, #7aa2ff);
+  box-shadow: 0 2px 8px rgba(47, 107, 255, .35);
+  flex: 0 0 auto;
+}
+.brand { display: flex; flex-direction: column; line-height: 1.25; }
+.app-name { font-weight: 700; font-size: 15px; }
+.app-sub { font-size: 12px; color: var(--text-2, #5b6b85); }
+.topbar .badge { margin-left: auto; }
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(16, 185, 129, .12);
+  color: #0f7a55;
+  border: 1px solid rgba(16, 185, 129, .3);
+}
+.badge.bad { background: rgba(239, 68, 68, .10); color: #b42318; border-color: rgba(239, 68, 68, .3); }
+
+.wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 20px 22px 48px;
+  display: grid;
+  gap: 16px;
+}
+
+.card {
+  background: var(--card, #fff);
+  border: 1px solid var(--line, #e6ebf3);
+  border-radius: 14px;
+  padding: 16px 18px;
+  box-shadow: 0 1px 3px rgba(16, 34, 64, .04);
+}
+.card h2 { margin: 0 0 6px; font-size: 15px; }
+.tip { margin: 0 0 12px; font-size: 12px; color: var(--text-2, #5b6b85); line-height: 1.7; }
+
+.kv {
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  gap: 6px 14px;
+  margin: 0 0 12px;
+  font-size: 13px;
+}
+.kv dt { color: var(--text-2, #5b6b85); }
+.kv dd { margin: 0; word-break: break-all; font-family: var(--mono, Consolas, monospace); font-size: 12.5px; }
+
+.row { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
+.row .input { flex: 1 1 auto; }
+
+.input {
+  height: 34px;
+  padding: 0 10px;
+  border: 1px solid var(--line, #d8e0ec);
+  border-radius: 9px;
+  background: var(--bg, #f8fafd);
+  color: inherit;
+  font-size: 13px;
+  font-family: inherit;
+  outline: none;
+}
+.input:focus { border-color: var(--primary, #2f6bff); box-shadow: 0 0 0 3px rgba(47, 107, 255, .12); }
+
+.btn {
+  height: 34px;
+  padding: 0 14px;
+  border-radius: 9px;
+  border: 1px solid var(--line, #d8e0ec);
+  background: var(--card, #fff);
+  color: inherit;
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background .15s, border-color .15s, transform .1s;
+  flex: 0 0 auto;
+}
+.btn:hover { border-color: var(--primary, #2f6bff); color: var(--primary, #2f6bff); }
+.btn:active { transform: translateY(1px); }
+.btn:disabled { opacity: .45; cursor: default; }
+.btn-primary { background: var(--primary, #2f6bff); border-color: var(--primary, #2f6bff); color: #fff; }
+.btn-primary:hover { color: #fff; filter: brightness(1.06); }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+.shot {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: zoom-in;
+  background: #0d1420;
+  transition: transform .15s, box-shadow .15s;
+}
+.shot:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(16, 34, 64, .16); }
+.shot img { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; }
+.shot .cap { padding: 6px 8px; font-size: 12px; color: #eaf0fa; background: #101a2b; }
+
+.log {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+  font-family: var(--mono, Consolas, monospace);
+  font-size: 12px;
+  max-height: 132px;
+  overflow: auto;
+  color: var(--text-2, #5b6b85);
+}
+.log li { padding: 3px 0; border-bottom: 1px dashed var(--line, #eef2f8); }
+.log li b { color: var(--primary, #2f6bff); font-weight: 600; }
+
+.proxy-out {
+  margin-top: 12px;
+  min-height: 60px;
+  border: 1px dashed var(--line, #e0e7f2);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
+.proxy-out img { max-width: 100%; max-height: 260px; border-radius: 8px; }
+.muted { color: var(--text-2, #5b6b85); font-size: 12px; }

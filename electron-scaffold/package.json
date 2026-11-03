@@ -1,0 +1,22 @@
+{
+  "name": "electron-scaffold",
+  "productName": "ScaffoldApp",
+  "version": "1.0.0",
+  "description": "Electron 桌面脚手架：主进程/preload/内嵌服务/打包配置/图标生成，复制即用",
+  "main": "main.js",
+  "author": "you",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "start:nogpu": "electron . --disable-gpu",
+    "icon": "python tools/gen_icon.py",
+    "dist": "electron-builder --win",
+    "dist:dir": "electron-builder --dir --win",
+    "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\""
+  },
+  "devDependencies": {
+    "electron": "^31.7.7",
+    "electron-builder": "^24.13.3"
+  }
+}

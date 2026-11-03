@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ScaffoldApp</title>
+<link rel="stylesheet" href="lib/theme.css">
+<link rel="stylesheet" href="lib/lightbox.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="logo" aria-hidden="true"></div>
+  <div class="brand">
+    <div class="app-name" id="appName">ScaffoldApp</div>
+    <div class="app-sub" id="appSub">Electron 桌面脚手架</div>
+  </div>
+  <span class="badge" id="srvBadge">服务</span>
+</header>
+
+<main class="wrap">
+  <section class="card">
+    <h2>环境自检</h2>
+    <p class="tip">启动即为成品形态：无菜单栏、单实例、窗口位置记忆、内嵌服务端口自动顺延。</p>
+    <dl class="kv" id="envList"></dl>
+    <div class="row">
+      <button class="btn" id="btnReload">重新读取</button>
+      <button class="btn" id="btnDataDir">打开数据目录</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>目录选择（IPC）</h2>
+    <p class="tip">渲染进程不碰 fs，一切走 preload → IPC → 主进程。这是唯一正确的姿势。</p>
+    <div class="row">
+      <input class="input" id="dirPath" placeholder="尚未选择目录" readonly>
+      <button class="btn btn-primary" id="btnPick">选择目录</button>
+      <button class="btn" id="btnOpenDir" disabled>打开</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>放大预览（ui-kit 组件）</h2>
+    <p class="tip">单击即弹窗；←/→ 翻页、滚轮缩放、双击 1:1、Esc 关闭。</p>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section class="card">
+    <h2>实时事件（SSE）</h2>
+    <p class="tip">内嵌服务 → 页面长连接。进度条、日志、队列变化都走这条通道，不必轮询。</p>
+    <div class="row">
+      <span class="badge" id="sseBadge">未连接</span>
+      <button class="btn" id="btnReconnect">重连</button>
+    </div>
+    <ul class="log" id="log"></ul>
+  </section>
+
+  <section class="card">
+    <h2>跨域代理（补 Referer）</h2>
+    <p class="tip">防盗链资源浏览器端加不了 Referer，必须服务端转发。填个图片直链试一下。</p>
+    <div class="row">
+      <input class="input" id="proxyUrl" placeholder="https://…/a.png">
+    </div>
+    <div class="row">
+      <input class="input" id="proxyRef" placeholder="Referer（可空，例：https://www.example.com/）">
+      <button class="btn btn-primary" id="btnProxy">加载</button>
+    </div>
+    <div class="proxy-out" id="proxyOut"><span class="muted">尚未加载</span></div>
+  </section>
+</main>
+
+<script src="lib/lightbox.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

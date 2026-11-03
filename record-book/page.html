@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>记录本 · RecordBook</title>
+  <!-- 直接复用模块库的 UI Kit 主题（这就是模块库的价值：UI 一次定稿，处处套用） -->
+  <link rel="stylesheet" href="../ui-kit/theme.css">
+  <style>
+    body { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+    .titlebar { -webkit-app-region: drag; height: 36px; display: flex; align-items: center; padding: 0 12px; gap: 10px; background: var(--surface); border-bottom: 1px solid var(--border); }
+    .titlebar .dot { width: 12px; height: 12px; border-radius: 50%; -webkit-app-region: no-drag; cursor: pointer; }
+    .titlebar .dot.c { background: #ff5f57; } .titlebar .dot.m { background: #febc2e; } .titlebar .dot.q { background: #28c840; }
+    .titlebar .tt { font-size: 13px; font-weight: 600; color: var(--text-2); }
+    .app-body { display: flex; flex: 1; min-height: 0; }
+    .sidebar { width: 200px; border-right: 1px solid var(--border); padding: 16px 12px; background: var(--surface-2); overflow-y: auto; }
+    .side-group { font-size: 11px; color: var(--text-3); text-transform: uppercase; letter-spacing: .5px; margin: 14px 0 6px; }
+    .side-item { padding: 7px 10px; border-radius: var(--radius-s); cursor: pointer; font-size: 13px; color: var(--text-2); }
+    .side-item:hover { background: var(--surface-hover); }
+    .side-item.active { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+    .main { flex: 1; min-width: 0; display: flex; flex-direction: column; padding: 16px 20px; overflow: hidden; }
+    .rec-list { flex: 1; overflow-y: auto; margin-top: 12px; padding-right: 4px; }
+    .rec-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; margin-bottom: 10px; display: flex; align-items: flex-start; gap: 10px; }
+    .rec-card.dragging { opacity: .5; }
+    .rec-card .drag { cursor: grab; color: var(--text-3); font-size: 16px; line-height: 1.4; user-select: none; }
+    .rec-card .body { flex: 1; min-width: 0; }
+    .rec-card .row1 { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .rec-card .name { font-weight: 600; font-size: 15px; }
+    .rec-card .links { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+    .link-chip { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 999px; font-size: 12px; cursor: pointer; border: 1px solid transparent; }
+    .link-chip.url { background: var(--accent-soft); color: var(--accent); }
+    .link-chip.local { background: #fdf0e6; color: var(--warning); }
+    [data-theme="dark"] .link-chip.local { background: #3a2a18; }
+    .link-chip .x { opacity: .6; font-weight: 700; }
+    .link-chip .x:hover { opacity: 1; }
+    .rec-card .ops { display: flex; gap: 6px; }
+    .ck-box { width: 16px; height: 16px; }
+    .empty { text-align: center; padding: 60px 20px; color: var(--text-3); }
+  </style>
+</head>
+<body>
+  <div class="titlebar">
+    <span class="dot c" onclick="window.close && window.close()"></span>
+    <span class="dot m"></span><span class="dot q"></span>
+    <span class="tt">记录本 · RecordBook</span>
+  </div>
+
+  <div class="app-body">
+    <aside class="sidebar">
+      <div class="side-group">视图</div>
+      <div class="side-item active" data-filter="all">全部</div>
+      <div class="side-item" data-filter="进行中">进行中</div>
+      <div class="side-item" data-filter="待办">待办</div>
+      <div class="side-item" data-filter="已完成">已完成</div>
+      <div class="side-group">操作</div>
+      <div class="side-item" id="sideImport">导入 JSON</div>
+      <div class="side-item" id="sideExport">导出 JSON</div>
+    </aside>
+
+    <main class="main">
+      <div class="toolbar">
+        <input class="input" id="search" style="max-width:260px" placeholder="🔍 搜索名称 / 备注…">
+        <button class="btn btn-primary" id="addBtn">＋ 新增</button>
+        <span class="spacer" style="flex:1"></span>
+        <span class="muted small" id="countTip"></span>
+      </div>
+
+      <div class="rec-list" id="recList"></div>
+
+      <div class="bulk-bar" id="bulkBar" style="display:none">
+        <span id="bulkCount">已选 0 项</span>
+        <span style="flex:1"></span>
+        <button class="bb-btn" id="bulkDone">标记完成</button>
+        <button class="bb-btn" id="bulkDel">删除</button>
+      </div>
+    </main>
+  </div>
+
+  <!-- 编辑弹窗（schema 驱动） -->
+  <div class="dialog-mask" id="editDialog">
+    <div class="dialog">
+      <h3 id="dlgTitle">新增记录</h3>
+      <div class="form-group"><label>名称</label><input class="input" id="f-name" placeholder="如：高等数学 复习"></div>
+      <div class="form-group"><label>分类</label><input class="input" id="f-cat" placeholder="如：备考"></div>
+      <div class="form-group"><label>状态</label>
+        <select id="f-status"><option>进行中</option><option>待办</option><option>已完成</option></select>
+      </div>
+      <div class="form-group"><label>备注</label><textarea id="f-note" placeholder="可选"></textarea></div>
+      <div class="form-group">
+        <label>链接（不限数量，本地路径或网址）</label>
+        <div id="linkList" class="links" style="display:flex;flex-direction:column;gap:6px"></div>
+        <div style="display:flex;gap:6px;margin-top:6px">
+          <input class="input" id="f-link-url" placeholder="粘贴网址或本地路径，回车添加">
+          <input class="input" id="f-link-label" placeholder="显示名(可选)" style="max-width:140px">
+          <button class="btn btn-sm" id="addLinkBtn">＋</button>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn" id="editCancel">取消</button>
+        <button class="btn btn-primary" id="editSave">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <input type="file" id="fileInput" accept="application/json" style="display:none">
+  <div class="toast-wrap" id="toastWrap"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+# Electron 打包模板（electron-builder）
+# 用法：npm i -D electron-builder，scripts: { "dist": "electron-builder" }
+appId: com.yourapp.id
+productName: 你的应用
+directories:
+  output: dist
+  buildResources: assets
+files:
+  - "**/*"
+  - "!**/*.map"
+  - "!node_modules/.cache"
+# Windows
+win:
+  target: [nsis, portable]
+  icon: assets/icon.ico
+  requestedExecutionLevel: asInvoker
+# macOS
+mac:
+  target: dmg
+  category: public.app-category.utilities
+# Linux
+linux:
+  target: [AppImage, deb]
+  category: Utility
+# 自动更新（可选，接 AutoUpdater）
+publish: null
